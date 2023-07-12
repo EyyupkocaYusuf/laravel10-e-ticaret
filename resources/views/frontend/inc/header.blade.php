@@ -42,9 +42,11 @@
                 <li class="has-children ">
                   <a href="#">Kategori</a>
                     <ul class="dropdown">
-                        <li><a href="#">Menu One</a></li>
-                        <li><a href="#">Menu Two</a></li>
-                        <li><a href="#">Menu Three</a></li>
+                        @if(!empty($categories && $categories->count() > 0))
+                        @foreach($categories as $category)
+                        <li><a href="#">{{$category->name}}</a></li>
+                        @endforeach
+                        @endif
                         <li class="has-children">
                             <a href="#">Sub Menu</a>
                             <ul class="dropdown">

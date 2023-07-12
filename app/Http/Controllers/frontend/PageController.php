@@ -12,6 +12,11 @@ class PageController extends Controller
         return view('frontend.pages.products');
     }
 
+    public function inidirimliurunler()
+    {
+        return view('frontend.pages.products');
+    }
+
     public function urundetay()
     {
         return view('frontend.pages.product_details');
