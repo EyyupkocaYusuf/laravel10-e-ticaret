@@ -11,10 +11,30 @@ use Illuminate\Http\Request;
 class PageController extends Controller
 {
 
-    public function urunler()
+    public function urunler(Request $request)
     {
+        $size = $request->size ?? '';
+        $color = $request->color ?? '';
+        $startprice = $request->start_price ?? '';
+        $endprice = $request->end_price ?? '';
         $categories = Category::whereStatus('1')->get();
-        $products = Product::whereStatus('1')->get();
+        $products = Product::whereStatus('1')
+            ->where(function($q) use($size,$color,$startprice,$endprice){
+                if(!empty($size))
+                {
+                     $q->where('size',$size);
+                }
+                if(!empty($color))
+                {
+                     $q->where('color',$color);
+                }
+                if(!empty($startprice) && $endprice)
+                {
+                     $q->whereBetween('price',[$startprice,$endprice]);
+                }
+                return $q;
+            })
+            ->paginate(1);
         return view('frontend.pages.products',compact('categories','products'));
     }
 
@@ -23,10 +43,11 @@ class PageController extends Controller
         return view('frontend.pages.products');
     }
 
-    public function urundetay()
+    public function urundetay($slug)
     {
         $categories = Category::whereStatus('1')->get();
-        return view('frontend.pages.product_details',compact('categories'));
+        $product = Product::whereSlug($slug)->first();
+        return view('frontend.pages.product_details',compact('categories','product'));
     }
 
     public function hakkimizda()

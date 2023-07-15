@@ -23,7 +23,7 @@ Route::group(['middleware' => 'sitesetting'],function (){
     Route::get('/urunler/cocuk-giyim',[PageController::class,'urunler'])->name('cocukurunler');
     Route::get('/urunler/indirimli',[PageController::class,'inidirimliurunler'])->name('inidirimliurunler');
 
-    Route::get('/urun/detay',[PageController::class,'urundetay'])->name('urundetay');
+    Route::get('/urun/{slug}',[PageController::class,'urundetay'])->name('urundetay');
     Route::get('/hakkimizda',[PageController::class,'hakkimizda'])->name('hakkimizda');
     Route::get('/iletisim',[PageController::class,'iletisim'])->name('iletisim');
     Route::post('/iletisim/kaydet',[AjaxController::class,'contactPost'])->name('iletisim.post');
