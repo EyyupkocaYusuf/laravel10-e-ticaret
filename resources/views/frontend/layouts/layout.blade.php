@@ -15,16 +15,16 @@
     <link rel="stylesheet" href="{{asset('/')}}css/owl.theme.default.min.css">
 
 
-    <link rel="stylesheet" href="{{asset('/')}}{{asset('/')}}css/aos.css">
+    <link rel="stylesheet" href="{{asset('/')}}css/aos.css">
 
-    <link rel="stylesheet" href="{{asset('/')}}{{asset('/')}}css/style.css">
+    <link rel="stylesheet" href="{{asset('/')}}css/style.css">
 
 </head>
 <body>
 
 <div class="site-wrap">
     @include('frontend.inc.header')
-{{asset('/')}}{{asset('/')}}
+
     @yield('content')
 
     @include('frontend.inc.footer')
@@ -38,7 +38,7 @@
 <script src="{{asset('/')}}js/jquery.magnific-popup.min.js"></script>
 <script src="{{asset('/')}}js/aos.js"></script>
 
-<script src="{{asset('/')}}js/main.js"></script>
+<script src="js/main.js"></script>
 
 </body>
 </html>

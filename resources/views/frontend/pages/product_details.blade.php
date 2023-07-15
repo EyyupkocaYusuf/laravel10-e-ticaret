@@ -8,12 +8,11 @@
             </div>
         </div>
     </div>
-
     <div class="site-section">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <img src="images/cloth_1.jpg" alt="Image" class="img-fluid">
+                    <img src="{{asset('/')}}images/cloth_1.jpg" alt="Image" class="img-fluid">
                 </div>
                 <div class="col-md-6">
                     <h2 class="text-black">Tank Top T-Shirt</h2>
@@ -44,15 +43,12 @@
                                 <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
                             </div>
                         </div>
-
                     </div>
                     <p><a href="cart.html" class="buy-now btn btn-sm btn-primary">Add To Cart</a></p>
-
                 </div>
             </div>
         </div>
     </div>
-
     <div class="site-section block-3 site-blocks-2 bg-light">
         <div class="container">
             <div class="row justify-content-center">

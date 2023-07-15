@@ -5,6 +5,7 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use App\Models\About;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -13,7 +14,8 @@ class PageController extends Controller
     public function urunler()
     {
         $categories = Category::whereStatus('1')->get();
-        return view('frontend.pages.products',compact('categories'));
+        $products = Product::whereStatus('1')->get();
+        return view('frontend.pages.products',compact('categories','products'));
     }
 
     public function inidirimliurunler()
