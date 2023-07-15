@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\About;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
+
     public function urunler()
     {
-        return view('frontend.pages.products');
+        $categories = Category::whereStatus('1')->get();
+        return view('frontend.pages.products',compact('categories'));
     }
 
     public function inidirimliurunler()
@@ -24,16 +28,20 @@ class PageController extends Controller
 
     public function hakkimizda()
     {
-        return view('frontend.pages.about');
+        $abouts = About::whereId('1')->first();
+        $categories = Category::whereStatus('1')->get();
+        return view('frontend.pages.about',compact('categories','abouts'));
     }
 
     public function cart()
     {
-        return view('frontend.pages.cart');
+        $categories = Category::whereStatus('1')->get();
+        return view('frontend.pages.cart',compact('categories'));
     }
 
     public function iletisim()
     {
-        return view('frontend.pages.contact');
+        $categories = Category::whereStatus('1')->get();
+        return view('frontend.pages.contact',compact('categories'));
     }
 }

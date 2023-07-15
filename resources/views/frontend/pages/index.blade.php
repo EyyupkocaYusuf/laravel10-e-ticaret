@@ -21,31 +21,32 @@
     <div class="site-section site-section-sm site-blocks-1">
         <div class="container">
             <div class="row">
+
                 <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4" data-aos="fade-up" data-aos-delay="">
                     <div class="icon mr-4 align-self-start">
-                        <span class="icon-truck"></span>
+                        <span class="{{$abouts->text_1_icon}}"></span>
                     </div>
                     <div class="text">
-                        <h2 class="text-uppercase">Free Shipping</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus at iaculis quam. Integer accumsan tincidunt fringilla.</p>
+                        <h2 class="text-uppercase">{{$abouts->text_1}}</h2>
+                        <p>{{$abouts->text_1_content}}.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4" data-aos="fade-up" data-aos-delay="100">
                     <div class="icon mr-4 align-self-start">
-                        <span class="icon-refresh2"></span>
+                        <span class="{{$abouts->text_2_icon}}"></span>
                     </div>
                     <div class="text">
-                            <h2 class="text-uppercase">GERİ İADE</h2>
-                        <p>30 gün içerisinde ücretsiz iade yapabilirsiniz.</p>
+                        <h2 class="text-uppercase">{{$abouts->text_2}}</h2>
+                        <p>{{$abouts->text_2_content}}.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4" data-aos="fade-up" data-aos-delay="200">
                     <div class="icon mr-4 align-self-start">
-                        <span class="icon-help"></span>
+                        <span class="{{$abouts->text_3_icon}}"></span>
                     </div>
                     <div class="text">
-                        <h2 class="text-uppercase">DESTEK</h2>
-                        <p>7/24 bize ulaşabilirsiniz.</p>
+                        <h2 class="text-uppercase">{{$abouts->text_1}}</h2>
+                        <p>{{$abouts->text_3_content}}.</p>
                     </div>
                 </div>
             </div>
