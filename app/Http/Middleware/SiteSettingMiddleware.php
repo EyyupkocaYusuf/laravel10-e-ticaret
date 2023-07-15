@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\SiteSetting;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\Response;
 
 class SiteSettingMiddleware
@@ -15,6 +17,10 @@ class SiteSettingMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $settings = SiteSetting::all()->pluck('data','name')->toArray();
+        view()->share(['settings'=>$settings]);
+
+
         return $next($request);
     }
 }
