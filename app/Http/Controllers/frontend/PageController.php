@@ -23,7 +23,8 @@ class PageController extends Controller
 
     public function urundetay()
     {
-        return view('frontend.pages.product_details');
+        $categories = Category::whereStatus('1')->get();
+        return view('frontend.pages.product_details',compact('categories'));
     }
 
     public function hakkimizda()
