@@ -24,9 +24,9 @@ class PageController extends Controller
 
         $order = $request->order ?? 'id';
 
-        $short = $request->short ?? 'desc';
+        $sort = $request->sort ?? 'desc';
 
-        $products = Product::whereStatus('1')->select(['id','name','slug','size','color','category_id','price','image'])
+         $products = Product::whereStatus('1')->select(['id','name','slug','size','color','category_id','price','image'])
             ->where(function($q) use($size,$color,$startprice,$endprice){
                 if(!empty($size))
                 {
@@ -59,7 +59,7 @@ class PageController extends Controller
 
              $colors = Product::whereStatus('1')->groupBy('color')->pluck('color')->toArray();
 
-            $products = $products->orderBy($order,$short)->paginate(20);
+            $products = $products->orderBy($order,$sort)->paginate(5);
         return view('frontend.pages.products',compact('products','minprice','maxprice','sizelists','colors'));
     }
 
@@ -84,11 +84,6 @@ class PageController extends Controller
     {
         $abouts = About::whereId('1')->first();
         return view('frontend.pages.about',compact('abouts'));
-    }
-
-    public function cart()
-    {
-        return view('frontend.pages.cart');
     }
 
     public function iletisim()

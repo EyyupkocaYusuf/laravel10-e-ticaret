@@ -3,6 +3,7 @@
 use App\Http\Controllers\frontend\PageHomeController;
 use \App\Http\Controllers\frontend\PageController;
 use \App\Http\Controllers\frontend\AjaxController;
+use \App\Http\Controllers\frontend\CartController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +28,8 @@ Route::group(['middleware' => 'sitesetting'],function (){
     Route::get('/hakkimizda',[PageController::class,'hakkimizda'])->name('hakkimizda');
     Route::get('/iletisim',[PageController::class,'iletisim'])->name('iletisim');
     Route::post('/iletisim/kaydet',[AjaxController::class,'contactPost'])->name('iletisim.post');
-    Route::get('/sepet',[PageController::class,'cart'])->name('sepet');
+
+    Route::get('/sepet',[CartController::class,'index'])->name('sepet');
+    Route::post('/sepet/ekle',[CartController::class,'add'])->name('sepet.add');
 
 });

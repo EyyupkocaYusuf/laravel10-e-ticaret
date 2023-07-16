@@ -18,18 +18,25 @@
                     <h2 class="text-black">{{$product->name ?? ''}}</h2>
                     <p>{!! $product->content ?? '' !!}</p>
                     <p><strong class="text-primary h4">{{number_format($product->price,2)}} ₺</strong></p>
+
+                 <form action="{{route('sepet.add')}}" method="POST">
+                        @csrf
+                     <input type="hidden" name="product_id" value="{{$product->id}}">
                     <div class="mb-1 d-flex">
-                        <label for="option-sm" class="d-flex mr-3 mb-3">
-                            <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-sm" name="shop-sizes"></span> <span class="d-inline-block text-black">Small</span>
+                        <label for="option-xs" class="d-flex mr-3 mb-3">
+                            <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-xs" value="XS" {{$product->size == 'XS' ? 'checked' : ''}} name="size"></span> <span class="d-inline-block text-black">XS</span>
                         </label>
-                        <label for="option-md" class="d-flex mr-3 mb-3">
-                            <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-md" name="shop-sizes"></span> <span class="d-inline-block text-black">Medium</span>
+                        <label for="option-s" class="d-flex mr-3 mb-3">
+                            <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-s" value="S" {{$product->size == 'S' ? 'checked' : ''}} name="size"></span> <span class="d-inline-block text-black">S</span>
                         </label>
-                        <label for="option-lg" class="d-flex mr-3 mb-3">
-                            <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-lg" name="shop-sizes"></span> <span class="d-inline-block text-black">Large</span>
+                        <label for="option-m" class="d-flex mr-3 mb-3">
+                            <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-m" value="M" {{$product->size == 'M' ? 'checked' : ''}} name="size"></span> <span class="d-inline-block text-black">M</span>
+                        </label>
+                        <label for="option-l" class="d-flex mr-3 mb-3">
+                            <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-l" value="L" {{$product->size == 'L' ? 'checked' : ''}} name="size"></span> <span class="d-inline-block text-black">L</span>
                         </label>
                         <label for="option-xl" class="d-flex mr-3 mb-3">
-                            <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-xl" name="shop-sizes"></span> <span class="d-inline-block text-black"> Extra Large</span>
+                            <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-xl" value="XL" {{$product->size == 'XL' ? 'checked' : ''}} name="size"></span> <span class="d-inline-block text-black">XL</span>
                         </label>
                     </div>
                     <div class="mb-5">
@@ -37,13 +44,14 @@
                             <div class="input-group-prepend">
                                 <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
                             </div>
-                            <input type="text" class="form-control text-center" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                            <input type="text" class="form-control text-center" value="1" name="qty" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
                             </div>
                         </div>
                     </div>
-                    <p><a href="cart.html" class="buy-now btn btn-sm btn-primary">Sepete Ekle</a></p>
+                    <p><button type="submit" class="buy-now btn btn-sm btn-primary">Sepete Ekle</button></p>
+                 </form>
                 </div>
             </div>
         </div>
@@ -73,54 +81,7 @@
                                      </div>
                                 </div>
                             @endforeach
-                        <div class="item">
-                            <div class="block-4 text-center">
-                                <figure class="block-4-image">
-                                    <img src="{{asset('/')}}images/shoe_1.jpg" alt="Image placeholder" class="img-fluid">
-                                </figure>
-                                <div class="block-4-text p-4">
-                                    <h3><a href="#">Corater</a></h3>
-                                    <p class="mb-0">Finding perfect products</p>
-                                    <p class="text-primary font-weight-bold">$50</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="block-4 text-center">
-                                <figure class="block-4-image">
-                                    <img src="{{asset('/')}}images/cloth_2.jpg" alt="Image placeholder" class="img-fluid">
-                                </figure>
-                                <div class="block-4-text p-4">
-                                    <h3><a href="#">Polo Shirt</a></h3>
-                                    <p class="mb-0">Finding perfect products</p>
-                                    <p class="text-primary font-weight-bold">$50</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="block-4 text-center">
-                                <figure class="block-4-image">
-                                    <img src="{{asset('/')}}images/cloth_3.jpg" alt="Image placeholder" class="img-fluid">
-                                </figure>
-                                <div class="block-4-text p-4">
-                                    <h3><a href="#">T-Shirt Mockup</a></h3>
-                                    <p class="mb-0">Finding perfect products</p>
-                                    <p class="text-primary font-weight-bold">$50</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="block-4 text-center">
-                                <figure class="block-4-image">
-                                    <img src="{{asset('/')}}images/shoe_1.jpg" alt="Image placeholder" class="img-fluid">
-                                </figure>
-                                <div class="block-4-text p-4">
-                                    <h3><a href="#">Corater</a></h3>
-                                    <p class="mb-0">Finding perfect products</p>
-                                    <p class="text-primary font-weight-bold">$50</p>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
