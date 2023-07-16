@@ -17,7 +17,7 @@ class PageController extends Controller
         $color = $request->color ?? '';
         $startprice = $request->start_price ?? '';
         $endprice = $request->end_price ?? '';
-        $categories = Category::whereStatus('1')->get();
+         $categories = Category::whereStatus('1')->where('cat_ust', null)->withCount('product_relation')->get();
         $products = Product::whereStatus('1')
             ->where(function($q) use($size,$color,$startprice,$endprice){
                 if(!empty($size))
@@ -34,8 +34,17 @@ class PageController extends Controller
                 }
                 return $q;
             })
-            ->paginate(1);
-        return view('frontend.pages.products',compact('categories','products'));
+            ->with('category_relation:id,name,slug');
+
+            $minprice = $products->min('price');
+            $maxprice = $products->max('price');
+
+             $sizelists = Product::whereStatus('1')->groupBy('size')->pluck('size')->toArray();
+
+             $colors = Product::whereStatus('1')->groupBy('color')->pluck('color')->toArray();
+
+            $products = $products->paginate(1);
+        return view('frontend.pages.products',compact('categories','products','minprice','maxprice','sizelists','colors'));
     }
 
     public function inidirimliurunler()

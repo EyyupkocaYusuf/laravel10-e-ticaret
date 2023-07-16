@@ -19,7 +19,6 @@ class Category extends Model
         'status',
         'slug',
     ];
-
     public function sluggable(): array
     {
         return [
@@ -27,5 +26,10 @@ class Category extends Model
                 'source' => 'name'
             ]
         ];
+    }
+
+    public function product_relation()
+    {
+        return $this->hasMany(Product::class,'category_id','id');
     }
 }

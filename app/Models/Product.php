@@ -22,7 +22,6 @@ class Product extends Model
         'status',
         'content',
     ];
-
     public function sluggable(): array
     {
         return [
@@ -30,5 +29,10 @@ class Product extends Model
                 'source' => 'name'
             ]
         ];
+    }
+
+    public function category_relation()
+    {
+        return $this->hasOne(Category::class,'id','category_id');
     }
 }
