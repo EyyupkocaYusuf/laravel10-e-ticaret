@@ -18,9 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'sitesetting'],function (){
     Route::get('/', [PageHomeController::class,'anasayfa'])->name('anasayfa');
     Route::get('/urunler',[PageController::class,'urunler'])->name('urunler');
-    Route::get('/urunler/erkek-giyim',[PageController::class,'urunler'])->name('erkekurunler');
-    Route::get('/urunler/kadin-giyim',[PageController::class,'urunler'])->name('kadinurunler');
-    Route::get('/urunler/cocuk-giyim',[PageController::class,'urunler'])->name('cocukurunler');
+    Route::get('/erkek/{slug?}',[PageController::class,'urunler'])->name('erkekurunler');
+    Route::get('/kadin/{slug?}',[PageController::class,'urunler'])->name('kadinurunler');
+    Route::get('/cocuk/{slug?}',[PageController::class,'urunler'])->name('cocukurunler');
     Route::get('/urunler/indirimli',[PageController::class,'inidirimliurunler'])->name('inidirimliurunler');
 
     Route::get('/urun/{slug}',[PageController::class,'urundetay'])->name('urundetay');
