@@ -31,5 +31,6 @@ Route::group(['middleware' => 'sitesetting'],function (){
 
     Route::get('/sepet',[CartController::class,'index'])->name('sepet');
     Route::post('/sepet/ekle',[CartController::class,'add'])->name('sepet.add');
+    Route::post('/sepet/remove',[CartController::class,'remove'])->name('sepet.remove');
 
 });

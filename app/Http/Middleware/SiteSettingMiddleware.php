@@ -20,7 +20,13 @@ class SiteSettingMiddleware
     {
         $settings = SiteSetting::all()->pluck('data','name')->toArray();
         $categories = Category::whereStatus('1')->with('subcategory')->withCount('product_relation')->get();
-        view()->share(['settings'=>$settings,'categories'=>$categories]);
+
+        $countQTY = 0;
+        $cartItem = session('cart',[]);
+        foreach ($cartItem as $cart) {
+            $countQTY += $cart['qty'];
+        }
+        view()->share(['settings'=>$settings,'categories'=>$categories, 'countQTY' => $countQTY]);
 
         return $next($request);
     }
