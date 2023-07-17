@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ContentFormRequest;
 use App\Models\Contact;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -28,6 +29,12 @@ class AjaxController extends Controller
             $contact = Contact::create($data);
 
             return redirect()->route('iletisim')->with('success', 'Message sent!');
-        }
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('anasayfa');
+    }
 
 }

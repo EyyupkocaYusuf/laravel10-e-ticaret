@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::group(['middleware' => 'sitesetting'],function (){
+Route::group(['middleware' => 'sitesetting','auth'],function (){
     Route::get('/', [PageHomeController::class,'anasayfa'])->name('anasayfa');
     Route::get('/urunler',[PageController::class,'urunler'])->name('urunler');
     Route::get('/erkek/{slug?}',[PageController::class,'urunler'])->name('erkekurunler');
@@ -36,9 +36,7 @@ Route::group(['middleware' => 'sitesetting'],function (){
 
     Auth::routes();
 
-    Route::get('/login',[CustomAuthController::class,'login'])->name('login');
+    Route::get('/cikis',[AjaxController::class,'logout'])->name('cikis');
 });
 
 
-
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
