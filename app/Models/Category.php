@@ -29,6 +29,18 @@ class Category extends Model
     {
         return $this->hasMany(Category::class,'cat_ust','id');
     }
+
+    public function getTotalProductCount()
+    {
+        $total = $this->product_relation()->count();
+
+        foreach ($this->subcategory as $childcategory)
+        {
+            $total += $childcategory->product_relation()->count();
+        }
+
+        return $total;
+    }
     public function sluggable(): array
     {
         return [
