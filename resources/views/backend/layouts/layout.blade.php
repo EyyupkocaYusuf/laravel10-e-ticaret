@@ -5,9 +5,11 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>Admin Page</title>
     <!-- plugins:css -->
-    <link rel="stylesheet" href="{{asset('backend')}}/css/bootstrap-toggle.min.css" >
+{{--    <link rel="stylesheet" href="{{asset('backend')}}/css/b.css" >--}}
 
     <link rel="stylesheet" href="{{asset('backend')}}/vendors/feather/feather.css">
     <link rel="stylesheet" href="{{asset('backend')}}/vendors/ti-icons/css/themify-icons.css">
@@ -22,7 +24,14 @@
     <link rel="stylesheet" href="{{asset('backend')}}/css/vertical-layout-light/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="{{asset('backend')}}/images/favicon.png" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
+    <link rel="stylesheet" href="{{asset('backend')}}/css/alertify_themes_bootstrap.min.css"/>
+    <link rel="stylesheet" href="{{asset('backend')}}/css/alertify.min.css"/>
+
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+
 
 </head>
 <body>
@@ -217,6 +226,8 @@
     <!-- page-body-wrapper ends -->
 </div>
 <!-- container-scroller -->
+{{--<script src="{{asset('/backend/')}}js/jquery.min.js"></script>--}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- plugins:js -->
 <script src="{{asset('/backend/')}}vendors/js/vendor.bundle.base.js"></script>
@@ -239,8 +250,12 @@
 <script src="{{asset('/backend/')}}js/dashboard.js"></script>
 <script src="{{asset('/backend/')}}js/Chart.roundedBarCharts.js"></script>
 <script src="{{asset('/backend/')}}js/file-upload.js" ></script>
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+@yield('customjs')
 
-<script src="{{asset('/backend/')}}js/bootstrap-toggle.min.js"></script>
+{{--<script src="{{asset('/backend')}}/js/a.js"></script>--}}
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <!-- End custom js for this page-->
 </body>

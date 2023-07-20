@@ -133,6 +133,24 @@ class SliderController extends Controller
 
         $slider->delete();
         return back()->withSuccess('Slider Başarılı bir şekilde Silindi');
-;
+
     }
+
+    public function status(Request $request)
+    {
+
+//         if( $request->statu == "true")
+//         {
+//             dd("bjkl ");
+//             $update = 1;
+//         }else {
+//             $update=0;
+//         }
+//         dd($update);
+        $slider = Slider::whereId($request->id)->first();
+        $slider->status = $request->statu == "true" ? "1": "0";
+        $slider->save();
+        return response(['error'=> false,'status'=>$request->statu]);
+    }
+
 }
