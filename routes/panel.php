@@ -11,8 +11,16 @@ use \App\Http\Controllers\backend\SliderController;
 
 Route::group(['middleware' => ['panelsetting','auth'], 'prefix' => 'panel','as' => 'panel.'],function (){
     Route::get('/', [DashboardController::class,'index'])->name('index');
-    Route::resource('/slider', SliderController::class);
-    Route::post('/slider-status/update', [SliderController::class,'status'])->name('slider.status');
+    Route::prefix('/slider')->name('slider.')->group(function (){
+        Route::get('/', [SliderController::class,'index'])->name('index');
+        Route::get('/ekle', [SliderController::class,'create'])->name('create');
+        Route::get('/{id}/edit', [SliderController::class,'edit'])->name('edit');
+        Route::post('/store', [SliderController::class,'store'])->name('store');
+        Route::put('/{id}/update', [SliderController::class,'update'])->name('update');
+        Route::delete('/destroy', [SliderController::class,'destroy'])->name('destroy');
+        Route::post('-status/update', [SliderController::class,'status'])->name('status');
+    });
+//    Route::post('/slider-status/update', [SliderController::class,'status'])->name('slider.status');
 });
 
 

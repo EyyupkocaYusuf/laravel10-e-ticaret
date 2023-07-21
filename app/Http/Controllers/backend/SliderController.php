@@ -61,7 +61,7 @@ class SliderController extends Controller
             'content' => $request->content,
             'image' => $resimUrl ?? '',
           ]);
-        return back()->withSuccess('Slider Başarılı bir şekilde oluşturuldu');
+        return redirect()->route('panel.slider.index')->withSuccess('Slider Başarılı bir şekilde oluşturuldu');
     }
 
     /**
@@ -120,9 +120,9 @@ class SliderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        $slider = Slider::whereId($id)->firstOrFail();
+        $slider = Slider::whereId($request->id)->firstOrFail();
 
         if(file_exists($slider->image))
         {
@@ -132,7 +132,8 @@ class SliderController extends Controller
         }
 
         $slider->delete();
-        return back()->withSuccess('Slider Başarılı bir şekilde Silindi');
+        return response(['error'=> false,'message'=>'Slider Başarılı bir şekilde Silindi']);
+
 
     }
 
@@ -147,10 +148,14 @@ class SliderController extends Controller
 //             $update=0;
 //         }
 //         dd($update);
-        $slider = Slider::whereId($request->id)->first();
-        $slider->status = $request->statu == "true" ? "1": "0";
-        $slider->save();
-        return response(['error'=> false,'status'=>$request->statu]);
+//        $slider = Slider::whereId($request->id)->first();
+//        $slider->status = $request->statu == "true" ? "1": "0";
+//        $slider->save();
+        $update = $request->statu;
+        $updatecheck = $update == "false" ? '0' : '1';
+        Slider::whereId($request->id)->update(['status'=> $updatecheck]);
+        return response(['error'=> false,'status'=>$update]);
+//        return response(['error'=> false,'status'=>$request->statu]);
     }
 
 }

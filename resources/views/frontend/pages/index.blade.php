@@ -10,7 +10,8 @@
                     <div class="intro-text text-center text-md-left">
                         <p class="mb-4">{{$slider->content ?? ''}}</p>
                         <p>
-                            <a href="{{url('/').'/'.$slider->link}}" class="btn btn-sm btn-primary">Ürünlerimiz</a>
+{{--                            <a href="{{url('/').'/'.$slider->link}}" class="btn btn-sm btn-primary">Ürünlerimiz</a>--}}
+                            <a href="{{route('urunler')}}" class="btn btn-sm btn-primary">Ürünlerimiz</a>
                         </p>
                     </div>
                 </div>
