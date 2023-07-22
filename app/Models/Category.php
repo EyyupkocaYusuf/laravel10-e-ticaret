@@ -30,6 +30,11 @@ class Category extends Model
         return $this->hasMany(Category::class,'cat_ust','id');
     }
 
+    public function category()
+    {
+        return $this->hasOne(Category::class,'id','cat_ust');
+    }
+
     public function getTotalProductCount()
     {
         $total = $this->product_relation()->count();

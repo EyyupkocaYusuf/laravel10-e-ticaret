@@ -3,21 +3,20 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SliderRequest;
-use App\Models\Slider;
+use App\Http\Requests\CategoryRequest;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
 
-class SliderController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $sliders = Slider::all();
-        return view('backend.pages.slider.index',compact('sliders'));
+        $categories = Category::with('category:id,cat_ust,name')->get();
+        return view('backend.pages.category.index',compact('categories'));
     }
 
     /**
@@ -25,30 +24,31 @@ class SliderController extends Controller
      */
     public function create()
     {
-        return view('backend.pages.slider.create');
+        $categories = Category::get();
+        return view('backend.pages.category.create',compact('categories'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(SliderRequest $request)
+    public function store(CategoryRequest $request)
     {
         if($request->hasFile('image')){
             $resim = $request->file('image');
             $dosyadi = time().'-'.Str::slug($request->name);
-            $yukleKlasor = 'img/slider/';
+            $yukleKlasor = 'img/kategori/';
 
             $resimUrl = resimyukle($resim,$dosyadi,$yukleKlasor);
-          }
+        }
 
-        Slider::create([
+        Category::create([
             'name' => $request->name,
-            'link' => $request->link,
+            'cat_ust' => $request->cat_ust,
             'status' => $request->status,
             'content' => $request->content,
             'image' => $resimUrl ?? '',
-          ]);
-        return redirect()->route('panel.slider.index')->withSuccess('Slider Başarılı bir şekilde oluşturuldu');
+        ]);
+        return redirect()->route('panel.category.index')->withSuccess('Kategori Başarılı bir şekilde oluşturuldu');
     }
 
     /**
@@ -64,8 +64,9 @@ class SliderController extends Controller
      */
     public function edit(string $id)
     {
-        $slider = Slider::whereId($id)->first();
-        return view('backend.pages.slider.edit',compact('slider'));
+        $category = Category::whereId($id)->firstOrFail();
+        $categories = Category::get();
+        return view('backend.pages.category.edit',compact('category','categories'));
     }
 
     /**
@@ -73,25 +74,25 @@ class SliderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $slider = Slider::whereId($id)->firstOrFail();
+        $category = Category::whereId($id)->firstOrFail();
 
         if($request->hasFile('image')){
-            dosyasil($slider->image);
+            dosyasil($category->image);
 
             $resim = $request->file('image');
             $dosyadi = time().'-'.Str::slug($request->name);
-            $yukleKlasor = 'img/slider/';
+            $yukleKlasor = 'img/kategori/';
             $resimUrl = resimyukle($resim,$dosyadi,$yukleKlasor);
         }
 
-        $slider->update([
+        $category->update([
             'name' => $request->name,
+            'cat_ust' => $request->cat_ust,
             'link' => $request->link,
             'status' => $request->status,
             'content' => $request->content,
-            'image' => $resimUrl ?? null,
         ]);
-        return redirect()->route('panel.slider.index')->withSuccess('Slider Başarılı bir şekilde Güncellendi');
+        return redirect()->route('panel.category.index')->withSuccess('Kategori Başarılı bir şekilde Güncellendi');
     }
 
     /**
@@ -99,11 +100,12 @@ class SliderController extends Controller
      */
     public function destroy(Request $request)
     {
-        $slider = Slider::whereId($request->id)->firstOrFail();
+        $category = Category::whereId($request->id)->firstOrFail();
 
-        dosyasil($slider->image);
-        $slider->delete();
-        return response(['error'=> false,'message'=>'Slider Başarılı bir şekilde Silindi']);
+        dosyasil($category->image);
+
+        $category->delete();
+        return response(['error'=> false,'message'=>'Kategori Başarılı bir şekilde Silindi']);
 
 
     }
@@ -112,9 +114,7 @@ class SliderController extends Controller
     {
         $update = $request->statu;
         $updatecheck = $update == "false" ? '0' : '1';
-        Slider::whereId($request->id)->update(['status'=> $updatecheck]);
+        Category::whereId($request->id)->update(['status'=> $updatecheck]);
         return response(['error'=> false,'status'=>$update]);
-//        return response(['error'=> false,'status'=>$request->statu]);
     }
-
 }
