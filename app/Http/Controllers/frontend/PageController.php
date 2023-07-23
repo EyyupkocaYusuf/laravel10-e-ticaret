@@ -15,30 +15,34 @@ class PageController extends Controller
     {
         $category = request()->segment(1) ?? null ;
 
-        $size = $request->size ?? '';
+        $sizes = !empty($request->size) ? explode(',', $request->size) : null;
 
-        $color = $request->color ?? '';
+        $colors = !empty($request->color) ? explode(',', $request->color) : null;
 
-        $startprice = $request->start_price ?? '';
-        $endprice = $request->end_price ?? '';
 
-        $order = $request->order ?? 'id';
+        $startprice = $request->min ?? null;
+        $endprice = $request->max ?? null;
+
+        $order = $request->order ?? 'slug';
 
         $sort = $request->sort ?? 'desc';
 
          $products = Product::whereStatus('1')->select(['id','name','slug','size','color','category_id','price','image'])
-            ->where(function($q) use($size,$color,$startprice,$endprice){
-                if(!empty($size))
+            ->where(function($q) use($sizes,$colors,$startprice,$endprice){
+                if(!empty($sizes))
                 {
-                     $q->where('size',$size);
+                     $q->whereIn('size',$sizes);
                 }
-                if(!empty($color))
+                if(!empty( $colors))
                 {
-                     $q->where('color',$color);
+                     $q->whereIn('color',$colors);
                 }
                 if(!empty($startprice) && $endprice)
                 {
-                     $q->whereBetween('price',[$startprice,$endprice]);
+//                     $q->whereBetween('price',[$startprice,$endprice]);
+
+                     $q->where('price','>=',$startprice);
+                     $q->where('price','<=',$endprice);
                 }
                 return $q;
             })
@@ -49,18 +53,20 @@ class PageController extends Controller
                     $q->where('slug',$slug);
                 }
                 return $q;
-            });
+            })->orderBy($order,$sort)->paginate(10);
 
+            if($request->ajax()){
+                $view = view('frontend.ajax.productList',compact('products'))->render();
+                return response(['data' => $view,'paginate' =>(string) $products->withQueryString()->links('vendor.pagination.bootstrap-4')]);
+            }
 
-            $minprice = $products->min('price');
-            $maxprice = $products->max('price');
+            $maxprice = Product::max('price');
 
-             $sizelists = Product::whereStatus('1')->groupBy('size')->pluck('size')->toArray();
+            $sizelists = Product::whereStatus('1')->groupBy('size')->pluck('size')->toArray();
 
-             $colors = Product::whereStatus('1')->groupBy('color')->pluck('color')->toArray();
+            $colors = Product::whereStatus('1')->groupBy('color')->pluck('color')->toArray();
 
-            $products = $products->orderBy($order,$sort)->paginate(5);
-        return view('frontend.pages.products',compact('products','minprice','maxprice','sizelists','colors'));
+        return view('frontend.pages.products',compact('products','maxprice','sizelists','colors'));
     }
 
     public function inidirimliurunler()

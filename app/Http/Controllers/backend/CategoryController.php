@@ -109,7 +109,6 @@ class CategoryController extends Controller
 
 
     }
-
     public function status(Request $request)
     {
         $update = $request->statu;

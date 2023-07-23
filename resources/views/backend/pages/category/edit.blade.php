@@ -61,7 +61,7 @@
                             @endphp
                             <select class="form-control" id="status" name="status">
                                 <option value="0" {{$status == '0' ? 'selected' : '' }}>Pasif</option>
-                                <option value="1" {{$status == '1' ? 'selected' : '' }} selected>Aktif</option>
+                                <option value="1" {{$status == '1' ? 'selected' : '' }} >Aktif</option>
                             </select>
                         </div>
 

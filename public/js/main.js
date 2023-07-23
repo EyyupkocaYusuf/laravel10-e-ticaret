@@ -153,13 +153,15 @@ jQuery(document).ready(function($) {
       range: true,
       min: 0,
       max: maxprice,
-      values: [ minprice, maxprice ],
+      values: [ defaultminprice, defaultmaxprice ],
       slide: function( event, ui ) {
-        $( "#amount" ).val( "₺" + ui.values[ 0 ] + " - ₺" + ui.values[ 1 ] );
+        $( "#amount" ).val( ui.values[ 0 ] + " - ₺" + ui.values[ 1 ] + "₺ " );
+        $( "#priceBetween" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ]);
+
       }
     });
-    $( "#amount" ).val( "₺" + $( "#slider-range" ).slider( "values", 0 ) +
-      " - ₺" + $( "#slider-range" ).slider( "values", 1 ) );
+    $( "#amount" ).val( $( "#slider-range" ).slider( "values", 0 ) + " ₺ -" + $( "#slider-range" ).slider( "values", 1 )+ " ₺" );
+    $( "#priceBetween" ).val( $( "#slider-range" ).slider( "values", 0 ) + " - " + $( "#slider-range" ).slider( "values", 1 ) );
 	};
 	siteSliderRange();
 

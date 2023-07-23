@@ -10,7 +10,7 @@ class About extends Model
     protected $table = 'abouts';
     protected $fillable = [
         'image',
-        'name',
+        'title',
         'content',
         'text_1_icon',
         'text_1',

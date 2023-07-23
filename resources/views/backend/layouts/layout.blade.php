@@ -30,8 +30,7 @@
 
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-
+    @yield('customcss')
 
 </head>
 <body>
@@ -244,7 +243,7 @@
 <script src="{{asset('/backend/')}}js/hoverable-collapse.js"></script>
 <script src="{{asset('/backend/')}}js/template.js"></script>
 <script src="{{asset('/backend/')}}js/settings.js"></script>
-<script src="{{asset('/backend/')}}js/todolist.js"></script>//
+<script src="{{asset('/backend/')}}js/todolist.js"></script>
 <!-- endinject -->
 <!-- Custom js for this page-->
 <script src="{{asset('/backend/')}}js/dashboard.js"></script>

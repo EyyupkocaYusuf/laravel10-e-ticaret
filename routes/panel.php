@@ -1,7 +1,9 @@
 <?php
 
 
+use App\Http\Controllers\backend\AboutController;
 use App\Http\Controllers\backend\CategoryController;
+use App\Http\Controllers\backend\ContactController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\backend\DashboardController;
 use \App\Http\Controllers\backend\SliderController;
@@ -24,6 +26,16 @@ Route::group(['middleware' => ['panelsetting','auth'], 'prefix' => 'panel','as' 
     Route::resource('/category', CategoryController::class)->except('destroy');
     Route::delete('/category/destroy', [CategoryController::class,'destroy'])->name('category.destroy');
     Route::post('/category-status/update', [CategoryController::class,'status'])->name('category.status');
+
+    Route::get('/about',[AboutController::class,'index'])->name('about.index');
+    Route::post('/about/update',[AboutController::class,'update'])->name('about.update');
+
+    Route::get('/contact',[ContactController::class,'index'])->name('contact.index');
+    Route::get('/contact/{id}/edit',[ContactController::class,'edit'])->name('contact.edit');
+    Route::put('/contact/{id}/update',[ContactController::class,'update'])->name('contact.update');
+    Route::delete('/destroy', [ContactController::class,'destroy'])->name('contact.destroy');
+    Route::post('/contact-status/update', [ContactController::class,'status'])->name('contact.status');
+
 });
 
 
