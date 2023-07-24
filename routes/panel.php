@@ -4,6 +4,7 @@
 use App\Http\Controllers\backend\AboutController;
 use App\Http\Controllers\backend\CategoryController;
 use App\Http\Controllers\backend\ContactController;
+use App\Http\Controllers\backend\SettingController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\backend\DashboardController;
 use \App\Http\Controllers\backend\SliderController;
@@ -30,11 +31,17 @@ Route::group(['middleware' => ['panelsetting','auth'], 'prefix' => 'panel','as' 
     Route::get('/about',[AboutController::class,'index'])->name('about.index');
     Route::post('/about/update',[AboutController::class,'update'])->name('about.update');
 
-    Route::get('/contact',[ContactController::class,'index'])->name('contact.index');
-    Route::get('/contact/{id}/edit',[ContactController::class,'edit'])->name('contact.edit');
-    Route::put('/contact/{id}/update',[ContactController::class,'update'])->name('contact.update');
-    Route::delete('/destroy', [ContactController::class,'destroy'])->name('contact.destroy');
-    Route::post('/contact-status/update', [ContactController::class,'status'])->name('contact.status');
+    Route::prefix('/contact')->name('contact.')->group(function (){
+        Route::get('/',[ContactController::class,'index'])->name('index');
+        Route::get('/{id}/edit',[ContactController::class,'edit'])->name('edit');
+        Route::put('/{id}/update',[ContactController::class,'update'])->name('update');
+        Route::delete('/destroy', [ContactController::class,'destroy'])->name('destroy');
+        Route::post('-status/update', [ContactController::class,'status'])->name('status');
+    });
+
+    Route::resource('/setting', SettingController::class)->except('destroy');
+    Route::delete('/setting/destroy', [SettingController::class,'destroy'])->name('setting.destroy');
+
 
 });
 
