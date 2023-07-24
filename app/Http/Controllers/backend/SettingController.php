@@ -90,8 +90,15 @@ class SettingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        $setting = SiteSetting::whereId($request->id)->firstOrFail();
+
+        if($setting->set_type == 'image' || $setting->set_type == 'file')
+        {
+            dosyasil($setting->data);
+        }
+        $setting->delete();
+        return response(['error'=> false,'message'=>'Setting Başarılı bir şekilde Silindi']);
     }
 }
