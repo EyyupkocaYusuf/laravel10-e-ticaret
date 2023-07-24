@@ -42,15 +42,9 @@
                                                     <input type="checkbox" class="durum" data-on="Aktif" data-off="Pasif" data-onstyle="success" data-offstyle="danger" {{$slider->status == 1 ? 'checked' : ''}} data-toggle="toggle">
                                                 </label>
                                             </div>
-
                                         </td>
                                         <td class="d-flex">
                                             <a href="{{route('panel.slider.edit',$slider->id)}}" class="btn btn-primary mr-2">Düzenle</a>
-{{--                                            <form action="{{route('panel.slider.destroy',$slider->id)}}" method="post">--}}
-{{--                                                @csrf--}}
-{{--                                                @method('DELETE')--}}
-{{--                                                <button type="submit" class="btn btn-danger">Sil</button>--}}
-{{--                                            </form>--}}
                                             <button type="button" class=" silBtn btn btn-danger">Sil</button>
                                         </td>
                                     </tr>

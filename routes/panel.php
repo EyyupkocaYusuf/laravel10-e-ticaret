@@ -4,6 +4,7 @@
 use App\Http\Controllers\backend\AboutController;
 use App\Http\Controllers\backend\CategoryController;
 use App\Http\Controllers\backend\ContactController;
+use App\Http\Controllers\backend\ProductController;
 use App\Http\Controllers\backend\SettingController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\backend\DashboardController;
@@ -41,6 +42,9 @@ Route::group(['middleware' => ['panelsetting','auth'], 'prefix' => 'panel','as' 
 
     Route::resource('/setting', SettingController::class)->except('destroy');
     Route::delete('/setting/destroy', [SettingController::class,'destroy'])->name('setting.destroy');
+
+    Route::resource('/product', ProductController::class)->except('destroy');
+    Route::delete('/product/destroy', [ProductController::class,'destroy'])->name('product.destroy');
 
 
 });

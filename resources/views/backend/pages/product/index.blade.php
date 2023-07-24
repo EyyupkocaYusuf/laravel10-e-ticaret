@@ -5,46 +5,57 @@
         <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Category Table</h4>
+                    <h4 class="card-title">Product Table</h4>
                     @if(session('success'))
                         <div class="alert alert-success">
                             {{session('success')}}
                         </div>
                     @endif
                     <p class="card-description">
-                        <a href="{{route('panel.category.create')}}" class="btn btn-primary">Yeni</a>
+                        <a href="{{route('panel.product.create')}}" class="btn btn-primary">Yeni</a>
                     </p>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                             <tr>
                                 <th>Resim</th>
-                                <th>Başlık</th>
-                                <th>Slogan</th>
-                                <th>link</th>
+                                <th>Adı</th>
+                                <th>Fiyat</th>
+                                <th>Kategori</th>
+                                <th>Kısa Metin</th>
+                                <th>Renk</th>
+                                <th>Beden</th>
+                                <th>Adet</th>
                                 <th>Status</th>
+                                <th>Açıklama</th>
                                 <th>Edit</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @if(!empty($categories) && $categories->count() > 0)
-                                @foreach($categories as $category)
-                                    <tr class="item" item-id="{{ $category->id }}">
+                            @if(!empty($products) && $products->count() > 0)
+                                @foreach($products as $product)
+                                    <tr class="item" item-id="{{ $product->id }}">
                                         <td class="py-1">
-                                            <img src="{{asset($category->image)}}" alt="image"/>
+                                            <img src="{{asset($product->image)}}" alt="image"/>
                                         </td>
-                                        <td>{{$category->name}}</td>
-                                        <td>{{$category->category->name ?? ''}}</td>
+                                        <td>{{$product->name}}</td>
+                                        <td>{{$product->price}}</td>
+                                        <td>{{$product->category_relation->name ?? ''}}</td>
+                                        <td>{{$product->short_text}}</td>
+                                        <td>{{$product->color}}</td>
+                                        <td>{{$product->size}}</td>
+                                        <td>{{$product->qty}}</td>
                                         <td>
                                             <div class="checkbox">
                                                 <label>
-                                                    <input type="checkbox" class="durum" data-on="Aktif" data-off="Pasif" data-onstyle="success" data-offstyle="danger" {{$category->status == 1 ? 'checked' : ''}} data-toggle="toggle">
+                                                    <input type="checkbox" class="durum" data-on="Aktif" data-off="Pasif" data-onstyle="success" data-offstyle="danger" {{$product->status == 1 ? 'checked' : ''}} data-toggle="toggle">
                                                 </label>
                                             </div>
 
                                         </td>
+                                        <td>{{\Illuminate\Support\Str::limit($product->content,25)}}</td>
                                         <td class="d-flex">
-                                            <a href="{{route('panel.category.edit',$category->id)}}" class="btn btn-primary mr-2">Düzenle</a>
+                                            <a href="{{route('panel.product.edit',$product->id)}}" class="btn btn-primary mr-2">Düzenle</a>
                                             <button type="button" class=" silBtn btn btn-danger">Sil</button>
                                         </td>
                                     </tr>
@@ -100,7 +111,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     type:"DELETE",
-                    url:"{{route('panel.category.destroy')}}",
+                    url:"{{route('panel.product.destroy')}}",
                     data:{
                         id:id,
                     },

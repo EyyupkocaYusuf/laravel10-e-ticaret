@@ -33,7 +33,7 @@
                                 <option value="">Kategori Seçiniz</option>
                                 @if($categories)
                                     @foreach($categories as $alt)
-                                        <option value="{{$alt->id}}" {{isset($category) && $category->cat_ust == $alt->id ? 'selected' : ''}}>
+                                        <option  value="{{$alt->id}}" {{isset($category) && $category->cat_ust == $alt->id ? 'selected' : ''}}>
                                             {{$alt->name}}
                                         </option>
                                     @endforeach
