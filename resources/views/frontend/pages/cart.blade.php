@@ -18,6 +18,12 @@
                             {{session()->get('success')}}
                         </div>
                     @endif
+
+                        @if(session()->get('error'))
+                            <div class="alert alert-danger">
+                                {{session()->get('error')}}
+                            </div>
+                        @endif
                 </div>
             </div>
             <div class="row mb-5">
@@ -77,22 +83,27 @@
                 <div class="col-md-6">
                     <div class="row mb-5">
                         <div class="col-md-6">
-                            <button class="btn btn-outline-primary btn-sm btn-block">Alışverişe Devam Et</button>
+                            <a href="{{route('urunler')}}" class="btn btn-outline-primary btn-sm btn-block">Alışverişe Devam Et</a>
                         </div>
                     </div>
+                <form action="{{route('sepet.coupon')}}" method="post">
+                    @csrf
                     <div class="row">
                         <div class="col-md-12">
                             <label class="text-black h4" for="coupon">Kupon</label>
                             <p>Kupon kodunu giriniz.</p>
                         </div>
                         <div class="col-md-8 mb-3 mb-md-0">
-                            <input type="text" class="form-control py-3" id="coupon" placeholder="Kupon Kodu">
+                            <input type="text" class="form-control py-3" id="coupon" value="{{session()->get('coupon_code')  ?? ''}}" name="coupon_name" placeholder="Kupon Kodu">
                         </div>
                         <div class="col-md-4">
-                            <button class="btn btn-primary btn-sm">İndirim Kuponu Uygula</button>
+                            <button type="submit" class="btn btn-primary btn-sm">İndirim Kuponu Uygula</button>
                         </div>
                     </div>
+                </form>
+
                 </div>
+
                 <div class="col-md-6 pl-5">
                     <div class="row justify-content-end">
                         <div class="col-md-7">
@@ -106,7 +117,7 @@
                                     <span class="text-black">Total</span>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <strong class="text-black">{{$totalPrice}}</strong>
+                                    <strong class="text-black">{{session()->get('total_price') ?? ''}}</strong>
                                 </div>
                             </div>
 

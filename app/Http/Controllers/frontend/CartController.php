@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,18 @@ class CartController extends Controller
             $totalPrice += $cart['price'] * $cart['qty'];
         }
 
-        return view('frontend.pages.cart',compact('cartItem','totalPrice'));
+        if(session()->get('coupon_code')) {
+            $kupon = Coupon::where('name',session()->get('coupon_code'))->whereStatus('1')->first();
+            $kuponprice = $kupon->price ?? 0;
+            $kuponcode = $kupon->name ?? '';
+
+            $newtotalPrice = $totalPrice - $kuponprice;
+        }else {
+            $newtotalPrice = $totalPrice;
+        }
+
+        session()->put('total_price',$newtotalPrice);
+        return view('frontend.pages.cart',compact('cartItem'));
     }
 
     public function add(Request $request)
@@ -62,5 +74,31 @@ class CartController extends Controller
         session(['cart' => $cartItem]);
         return back()->withSuccess('Ürün Sepetten Kaldırıldı.');
 
+    }
+
+    public function couponcheck(Request $request) {
+        $cartItem = session('cart',[]);
+        $totalPrice = 0;
+
+        foreach ($cartItem as $cart)
+        {
+             $totalPrice += $cart['price'] * $cart['qty'];
+        }
+
+        $kupon = Coupon::where('name',$request->coupon_name)->whereStatus('1')->first();
+
+        if(empty($kupon)) {
+            return back()->withError('Kupon Bulunamadı');
+        }
+         $kuponprice = $kupon->price ?? 0;
+         $kuponcode = $kupon->name ?? '';
+
+         $newtotalPrice = $totalPrice - $kuponprice;
+
+        session()->put('total_price',$newtotalPrice);
+
+        session()->put('coupon_code',$kuponcode);
+
+        return back()->withSuccess('Kupon Uygulandı');
     }
 }
