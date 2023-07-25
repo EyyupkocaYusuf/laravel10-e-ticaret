@@ -40,7 +40,6 @@
                             </tr>
                             </thead>
                             <tbody>
-
                             @if($cartItem)
                                 @foreach($cartItem as $key => $cart)
                             <tr class="orderItem" data-id="{{$key}}">

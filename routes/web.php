@@ -36,6 +36,7 @@ Route::group(['middleware' => 'sitesetting','auth'],function (){
     Route::post('/sepet/remove',[CartController::class,'remove'])->name('sepet.remove');
     Route::post('/sepet/kupon',[CartController::class,'couponcheck'])->name('sepet.coupon');
     Route::post('/sepet/newqty', [CartController::class,'newqty'])->name('sepet.newqty');
+    Route::post('/sepet/odeme/form', [CartController::class,'payformsave'])->name('sepet.payform');
 
     Auth::routes();
 

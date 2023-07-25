@@ -4,6 +4,17 @@
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 
+if(!function_exists('GenerateOtp')){
+    function GenerateOtp($n) {
+        $generator = '1357902468';
+        $result = '';
+        for ($i=1; $i <= $n; $i++) {
+            $result .= substr($generator,(rand()%(strlen($generator))),1);
+        }
+        return $result;
+    }
+}
+
 if(!function_exists('dosyasil'))
 {
     function dosyasil($string)

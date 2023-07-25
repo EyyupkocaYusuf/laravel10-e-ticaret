@@ -4,8 +4,11 @@ namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Coupon;
+use App\Models\Invoice;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -57,7 +60,6 @@ class CartController extends Controller
         return view('frontend.pages.cartform',compact('cartItem'));
     }
 
-
     public function add(Request $request)
     {
         $productID = $request->product_id;
@@ -98,7 +100,6 @@ class CartController extends Controller
         session(['cart' => $cartItem]);
 
         return back()->withSuccess('Ürün Sepetten Kaldırıldı.');
-
     }
 
     public function couponcheck(Request $request) {
@@ -115,20 +116,19 @@ class CartController extends Controller
         if(empty($kupon)) {
             return back()->withError('Kupon Bulunamadı');
         }
+
          $kuponprice = $kupon->price ?? 0;
+
          $kuponcode = $kupon->name ?? '';
 
          $newtotalPrice = $totalPrice - $kuponprice;
-
+        session()->put('coupon_price',$kuponprice);
         session()->put('total_price',$newtotalPrice);
-
         session()->put('coupon_code',$kuponcode);
+
 
         return back()->withSuccess('Kupon Uygulandı');
     }
-
-
-// ...
 
     public function newqty(Request $request)
     {
@@ -148,7 +148,6 @@ class CartController extends Controller
             if($qty == 0 || $qty < 0) {
                 unset($cartItem[$productID]);
             }
-
             $itemTotal = $urun->price * $qty;
         }
         session(['cart' => $cartItem]);
@@ -156,6 +155,50 @@ class CartController extends Controller
             return response()->json(['itemTotal'=>$itemTotal,'message'=>'Sepet Güncellendi']);
         }
 
+    }
+
+    function generateKod() {
+        $randevukodu = GenerateOtp(7);
+        if($this->barcodeKodExists($randevukodu)) {
+            return $this->generateKod();
+        }
+        return $randevukodu;
+    }
+
+    function barcodeKodExists($randevukodu) {
+
+        return Invoice::where('order_no',$randevukodu)->exists();
+    }
+
+    public function payformsave(Request $request) {
+
+        $invoce = Invoice::create([
+            'user_id' => auth()->user()->id ?? null,
+            'order_no'=>$this->generateKod(),
+            'name' =>$request->name,
+            'surname' =>$request->surname,
+            'email' =>$request->email,
+            'phone'=>$request->phone,
+            'address'=>$request->address,
+            'country' =>$request->country,
+            'city'=>$request->city,
+            'district'=>$request->district,
+            'zip_code' =>$request->zip_code,
+            'order_note'=>$request->order_note,
+        ]);
+
+        $cart = session()->get('cart') ?? [];
+        foreach ($cart as $key => $item){
+            Order::create([
+                'order_no'=>$invoce->order_no,
+                'product_id'=>$key,
+                'name'=>$item['name'],
+                'price'=>$item['price'],
+                'qty'=>$item['qty'],
+            ]);
+        }
+        session()->forget('cart');
+        return redirect()->route('anasayfa');
     }
 
 }
