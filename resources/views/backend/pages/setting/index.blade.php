@@ -63,7 +63,7 @@
 
         alertify.confirm("Silmek istediğinize emin misiniz?","Silmek istediğinize emin misiniz?",
             function(){
-                            $.ajax({
+                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },

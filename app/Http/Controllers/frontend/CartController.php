@@ -70,8 +70,8 @@ class CartController extends Controller
         {
             unset($cartItem[$productID]);
         }
-
         session(['cart' => $cartItem]);
+
         return back()->withSuccess('Ürün Sepetten Kaldırıldı.');
 
     }
@@ -101,4 +101,37 @@ class CartController extends Controller
 
         return back()->withSuccess('Kupon Uygulandı');
     }
+
+
+// ...
+
+    public function newqty(Request $request)
+    {
+        $productID = $request->product_id;
+        $qty = $request->qty?? 1;
+        $size = $request->size;
+        $itemTotal = 0;
+
+        $urun = Product::find($productID);
+        if(!$urun) {
+            return response()->json('Ürün Bulunamadı');
+        }
+        $cartItem = session('cart',[]);
+
+        if(array_key_exists($productID,$cartItem))
+        {
+            $cartItem[$productID]['qty'] = $qty;
+            if($qty == 0 || $qty < 0) {
+                unset($cartItem[$productID]);
+            }
+
+            $itemTotal = $urun->price * $qty;
+        }
+        session(['cart' => $cartItem]);
+        if($request->ajax()) {
+            return response()->json(['itemTotal'=>$itemTotal,'message'=>'Sepet Güncellendi']);
+        }
+
+    }
+
 }
