@@ -137,22 +137,22 @@
     <!-- Görünüme veya bir JS dosyasına bu betiği ekleyin -->
     <script>
         $(document).on('click','.paymentButton',function(e) {
+            var url = "{{route('sepet.form')}}";
 
+            @if(!empty(session()->get('cart')))
+                window.location.href = url;
+            @endif
         });
 
         $(document).on('click','.decreaseBtn',function(e) {
-
             $('.orderItem').removeClass('selected');
             $(this).closest('.orderItem').addClass('selected');
-
-            var product_id = $('.selected').closest('.orderItem').attr('data-id');
-            var qty = $('.selected').closest('.orderItem').find('.qtyItem').val();
-
-            sepetUpdate(product_id,qty,'Azalt');
-
+            sepetUpdate();
         });
 
-        function sepetUpdate(product_id,qty,itemevent) {
+        function sepetUpdate() {
+            var product_id = $('.selected').closest('.orderItem').attr('data-id');
+            var qty = $('.selected').closest('.orderItem').find('.qtyItem').val();
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -162,7 +162,6 @@
                 data:{
                     product_id:product_id,
                     qty:qty,
-                    itemevent:itemevent,
                 },
                 success: function (response){
                     $('.selected').find('.itemTotal').text(response.itemTotal);
@@ -178,11 +177,7 @@
         $(document).on('click','.increaseBtn',function(e) {
             $('.orderItem').removeClass('selected');
             $(this).closest('.orderItem').addClass('selected');
-
-            var product_id = $('.selected').closest('.orderItem').attr('data-id');
-            var qty = $('.selected').closest('.orderItem').find('.qtyItem').val();
-            sepetUpdate(product_id,qty,'Arttır');
-
+            sepetUpdate();
         });
         </script>
 @endsection

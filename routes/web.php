@@ -31,6 +31,7 @@ Route::group(['middleware' => 'sitesetting','auth'],function (){
     Route::post('/iletisim/kaydet',[AjaxController::class,'contactPost'])->name('iletisim.post');
 
     Route::get('/sepet',[CartController::class,'index'])->name('sepet');
+    Route::get('/sepet/form/odeme',[CartController::class,'sepetform'])->name('sepet.form');
     Route::post('/sepet/ekle',[CartController::class,'add'])->name('sepet.add');
     Route::post('/sepet/remove',[CartController::class,'remove'])->name('sepet.remove');
     Route::post('/sepet/kupon',[CartController::class,'couponcheck'])->name('sepet.coupon');

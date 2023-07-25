@@ -33,6 +33,31 @@ class CartController extends Controller
         return view('frontend.pages.cart',compact('cartItem'));
     }
 
+    public function sepetform()
+    {
+        $cartItem = session('cart',[]);
+        $totalPrice = 0;
+
+        foreach ($cartItem as $cart)
+        {
+            $totalPrice += $cart['price'] * $cart['qty'];
+        }
+
+        if(session()->get('coupon_code')) {
+            $kupon = Coupon::where('name',session()->get('coupon_code'))->whereStatus('1')->first();
+            $kuponprice = $kupon->price ?? 0;
+            $kuponcode = $kupon->name ?? '';
+
+            $newtotalPrice = $totalPrice - $kuponprice;
+        }else {
+            $newtotalPrice = $totalPrice;
+        }
+
+        session()->put('total_price',$newtotalPrice);
+        return view('frontend.pages.cartform',compact('cartItem'));
+    }
+
+
     public function add(Request $request)
     {
         $productID = $request->product_id;
@@ -109,7 +134,6 @@ class CartController extends Controller
     {
         $productID = $request->product_id;
         $qty = $request->qty?? 1;
-        $size = $request->size;
         $itemTotal = 0;
 
         $urun = Product::find($productID);
