@@ -30,7 +30,7 @@
                     <form class="forms-sample" action="{{route('panel.setting.update',$setting->id)}}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        <!-- HTML -->
+
                         <div class="form-group">
                             <div class="input-group col-xs-12">
                                 @if(isset($setting->set_type) && $setting->set_type == 'image')
@@ -38,7 +38,6 @@
                                 @endif
                             </div>
                         </div>
-
 
                         <div class="form-group">
                             <select name="set_type" class="form-control" id="setTypeSelect">

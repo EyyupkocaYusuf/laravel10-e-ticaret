@@ -77,9 +77,16 @@ class SettingController extends Controller
             $yukleKlasor = 'img/setting/';
             $resimUrl = resimyukle($resim,$dosyadi,$yukleKlasor);
         }
+
+        if($request->set_type == 'file' || $request->set_type == 'image') {
+
+            $dataItem = $resimUrl ?? $setting->data;
+        }else {
+            $dataItem = $request->data ?? $setting->data;
+        }
         $setting->update([
             'name' => $key,
-            'data' => $resimUrl ?? $request->data,
+            'data' => $dataItem,
             'set_type' => $request->set_type,
         ]);
 

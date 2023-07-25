@@ -24,10 +24,11 @@ class AboutController extends Controller
 
             $resimUrl = resimyukle($resim,$dosyadi,$yukleKlasor);
         }
+        $about = About::whereId($id)->first();
         About::updateOrCreate(
             ['id' => $id],
             [
-                'image' => $resimUrl ?? '',
+                'image' => $resimUrl ?? $about->image,
                 'title' => $request->title,
                 'content' => $request->content,
                 'text_1_icon' => $request->text_1_icon,

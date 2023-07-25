@@ -89,7 +89,7 @@ class SliderController extends Controller
             'link' => $request->link,
             'status' => $request->status,
             'content' => $request->content,
-            'image' => $resimUrl ?? null,
+            'image' => $resimUrl ?? $slider->image,
         ]);
         return redirect()->route('panel.slider.index')->withSuccess('Slider Başarılı bir şekilde Güncellendi');
     }

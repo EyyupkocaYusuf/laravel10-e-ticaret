@@ -91,7 +91,7 @@ class ProductController extends Controller
         }
         $product->update([
             'name' => $request->name,
-            'image' =>$resimUrl ?? '',
+            'image' =>$resimUrl ?? $product->image,
             'category_id' =>$request->category_id,
             'short_text' =>$request->short_text,
             'price' =>$request->price,

@@ -87,6 +87,7 @@ class CategoryController extends Controller
 
         $category->update([
             'name' => $request->name,
+            'image' => $resimUrl ?? $category->image,
             'cat_ust' => $request->cat_ust,
             'link' => $request->link,
             'status' => $request->status,
