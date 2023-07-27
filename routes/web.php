@@ -30,14 +30,15 @@ Route::group(['middleware' => 'sitesetting','auth'],function (){
     Route::get('/iletisim',[PageController::class,'iletisim'])->name('iletisim');
     Route::post('/iletisim/kaydet',[AjaxController::class,'contactPost'])->name('iletisim.post');
 
-    Route::get('/sepet',[CartController::class,'index'])->name('sepet');
-    Route::get('/sepet/form/odeme',[CartController::class,'sepetform'])->name('sepet.form');
-    Route::post('/sepet/ekle',[CartController::class,'add'])->name('sepet.add');
-    Route::post('/sepet/remove',[CartController::class,'remove'])->name('sepet.remove');
-    Route::post('/sepet/kupon',[CartController::class,'couponcheck'])->name('sepet.coupon');
-    Route::post('/sepet/newqty', [CartController::class,'newqty'])->name('sepet.newqty');
-    Route::post('/sepet/odeme/form', [CartController::class,'payformsave'])->name('sepet.payform');
-
+    Route::prefix('/sepet')->name('sepet')->group(function (){
+    Route::get('/',[CartController::class,'index']);
+    Route::get('/form/odeme',[CartController::class,'sepetform'])->name('.form');
+    Route::post('/ekle',[CartController::class,'add'])->name('.add');
+    Route::post('/remove',[CartController::class,'remove'])->name('.remove');
+    Route::post('/kupon',[CartController::class,'couponcheck'])->name('.coupon');
+    Route::post('/newqty', [CartController::class,'newqty'])->name('.newqty');
+    Route::post('/odeme/form', [CartController::class,'payformsave'])->name('.payform');
+    });
     Auth::routes();
 
     Route::get('/cikis',[AjaxController::class,'logout'])->name('cikis');

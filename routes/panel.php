@@ -4,6 +4,7 @@
 use App\Http\Controllers\backend\AboutController;
 use App\Http\Controllers\backend\CategoryController;
 use App\Http\Controllers\backend\ContactController;
+use App\Http\Controllers\backend\OrderController;
 use App\Http\Controllers\backend\ProductController;
 use App\Http\Controllers\backend\SettingController;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +39,14 @@ Route::group(['middleware' => ['panelsetting','auth'], 'prefix' => 'panel','as' 
         Route::put('/{id}/update',[ContactController::class,'update'])->name('update');
         Route::delete('/destroy', [ContactController::class,'destroy'])->name('destroy');
         Route::post('-status/update', [ContactController::class,'status'])->name('status');
+    });
+
+    Route::prefix('/order')->name('order.')->group(function (){
+        Route::get('/',[OrderController::class,'index'])->name('index');
+        Route::get('/{id}/edit',[OrderController::class,'edit'])->name('edit');
+        Route::put('/{id}/update',[OrderController::class,'update'])->name('update');
+        Route::delete('/destroy', [OrderController::class,'destroy'])->name('destroy');
+        Route::post('-status/update', [OrderController::class,'status'])->name('status');
     });
 
     Route::resource('/setting', SettingController::class)->except('destroy');
