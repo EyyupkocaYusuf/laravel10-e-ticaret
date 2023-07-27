@@ -138,114 +138,81 @@
                             {{session('success')}}
                         </div>
                     @endif
-                    <form class="forms-sample" action="{{route('panel.order.update',$order->id)}}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" value="{{$order->name}}" placeholder="Name">
-                        </div>
 
-                        <div class="form-group">
-                            <label for="surname">Surname</label>
-                            <input type="text" class="form-control" id="surname" name="surname" value="{{$order->surname}}" placeholder="surname">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">email</label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{$order->email}}" placeholder="email">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="status">Status</label>
-                            @php
-                                $status = $order->status ?? '1';
-                            @endphp
-                            <select class="form-control" id="status" name="status">
-                                <option value="0" {{$status == '0' ? 'selected' : '' }}>Pasif</option>
-                                <option value="1" {{$status == '1' ? 'selected' : '' }} >Aktif</option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                        <button class="btn btn-light">Cancel</button>
-                    </form>
                 </div>
                 <div class="page">
                     <div class="subpage">
-                        <div class="header center"><img class="header-img" src="http://static1.squarespace.com/static/60323ee1186dda02003d1ccb/t/6077e628e2ed7c0242e84dcf/1618470443292/small.+black+text-01.png?format=1500w" />
-                            <h2 class="font-weight-400" >Entity</h2>
+                        <div class="header center"><img class="header-img" src="" />
+                            <h2 class="font-weight-400" >{{$invoice->name}} {{$invoice->surname}}</h2>
                         </div>
 
                         <div class="invoice">
                             <div class="invoce-from">
                                 <p class="invoice-header">Invoice To</p>
                                 <div class="font-size-14">
-                                    <p>Brad</p>
-                                    <p>123123123123</p>
+                                    <p>{{$invoice->order_no}}</p>
                                 </div>
                             </div>
                             <div class="font-size-14">
-                                <p class="bold-text">Invoice date: 09/09/2021</p>
-                                <p>Booking date: 09/09/2021</p>
+                                <p class="bold-text">Sipariş Tarihi: {{isset($invoice->created_at) ? \Carbon\Carbon::parse($invoice->created_at) : ''}}</p>
+                                <p>Onaylanma Tarihi:{{isset($invoice->updated_at) ? \Carbon\Carbon::parse($invoice->updated_at) : ''}}</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="content">
-                        <h2 class="center font-weight-400">Invoice</h2>
-                        <p class="font-size-14">Invoice reference: 123234</p>
+                        <h2 class="center font-weight-400">Fatura Bilgileri</h2>
+                        <p class="font-size-14">{{\Illuminate\Support\Str::limit($invoice->address,65)}}</p>
+                        <p class="font-size-14">{{$invoice->phone}}</p>
+                        <p class="font-size-14">{{$invoice->email}}</p>
+                        <p class="font-size-14">{{$invoice->country}}</p>
+                        <p class="font-size-14">{{$invoice->city}}</p>
+                        <p class="font-size-14">{{$invoice->district}}</p>
+                        <p class="font-size-14">{{$invoice->zip_code}}</p>
+                        <p class="font-size-14">{{$invoice->order_note}}</p>
 
                         <table class="unstyledTable">
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Qty</th>
-                                <th>Rate of VAT</th>
-                                <th>Unit Price</th>
-                                <th>Unit Total</th>
+                                <th>İsim</th>
+                                <th>Adet</th>
+                                <th>Fiyat</th>
+                                <th>Kdv</th>
+                                <th>Toplam Tutar</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>Test ticket number</td>
-                                <td>1</td>
-                                <td>20%</td>
-                                <td>5.00</td>
-                                <td>5.00</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td colspan="2" class="bold-text">Including transaction fee:</td>
-                                <td>32</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="bold-text">Net total:</td>
-                                <td>32</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="bold-text">Vat total:</td>
-                                <td>32</td>
-                            </tr>
-                            <tr class="last-row">
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="bold-text">total:</td>
-                                <td>32</td>
-                            </tr>
+                            @php
+                                $allTotal=0;
+                            @endphp
+                            @if(!empty($invoice->orders))
+                                @foreach($invoice->orders as $item)
+                                    @php
+                                        $fiyat = $item['price'];
+                                        $adet = $item['qty'];
+                                        $kdv = $item['kdv'] ?? 0;
+
+                                        $kdvTutar = ($fiyat * $adet) * ($kdv/100);
+                                        $toplamTutar = ($fiyat * $adet) + $kdvTutar;
+
+                                    @endphp
+                                    <tr>
+                                        <td>{{$item['name'] ?? ''}}</td>
+                                        <td>{{$item['qty'] ?? ''}}</td>
+                                        <td>{{$item['price'] ?? ''}}</td>
+                                        <td>%{{$item['kdv'] ?? ''}}</td>
+                                        <td>{{$toplamTutar}}</td>
+                                        @php
+                                            $allTotal += $toplamTutar;
+                                        @endphp
+                                    </tr>
+                                @endforeach
+                            @endif
                             </tbody>
                             </tr>
                         </table>
 
-                        <div class="footer"><h2 class="font-weight-400">VAT. not Test<h2/></div>
+                        <div class="footer"><h2 class="font-weight-400">{{$allTotal}}<h2/></div>
                     </div>
                 </div>
             </div>

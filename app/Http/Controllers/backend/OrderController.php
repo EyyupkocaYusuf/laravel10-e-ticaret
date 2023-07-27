@@ -18,8 +18,8 @@ class OrderController extends Controller
 
     public function edit($id)
     {
-        $order = Invoice::whereId($id)->firstOrFail();
-        return view('backend.pages.order.edit',compact('order'));
+        $invoice = Invoice::whereId($id)->with('orders')->firstOrFail();
+        return view('backend.pages.order.edit',compact('invoice'));
     }
 
     public function update(Request $request,$id)
