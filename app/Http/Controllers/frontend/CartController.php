@@ -55,7 +55,7 @@ class CartController extends Controller
 
     public function add(Request $request)
     {
-        $productID = $request->product_id;
+        $productID = sifreCoz($request->product_id);
         $qty = $request->qty;
         $size = $request->size;
         $urun = Product::find($productID);
@@ -79,12 +79,16 @@ class CartController extends Controller
             ];
         }
         session(['cart' => $cartItem]);
+
+        if($request->ajax()) {
+            return response()->json(['sepetCount' => count(session()->get('cart')),'message' => 'Ürün sepete eklendi']);
+        }
         return back()->withSuccess('Ürün Sepete Eklendi');
     }
 
     public function remove(Request $request)
     {
-        $productID = $request->product_id;
+        $productID = sifreCoz($request->product_id);
         $cartItem = session('cart',[]);
 
         if(array_key_exists($productID,$cartItem))
@@ -96,6 +100,10 @@ class CartController extends Controller
         if(count(session()->get('cart')) == 0)
         {
             session()->forget('coupon_code');
+        }
+
+        if($request->ajax()) {
+            return response()->json(['sepetCount' => count(session()->get('cart')),'message' => 'Ürün sepetten çıkarıldı']);
         }
 
         return back()->withSuccess('Ürün Sepetten Kaldırıldı.');

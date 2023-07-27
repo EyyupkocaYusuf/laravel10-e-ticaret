@@ -138,7 +138,6 @@
                             {{session('success')}}
                         </div>
                     @endif
-
                 </div>
                 <div class="page">
                     <div class="subpage">
@@ -159,7 +158,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="content">
                         <h2 class="center font-weight-400">Fatura Bilgileri</h2>
                         <p class="font-size-14">{{\Illuminate\Support\Str::limit($invoice->address,65)}}</p>
@@ -170,7 +168,6 @@
                         <p class="font-size-14">{{$invoice->district}}</p>
                         <p class="font-size-14">{{$invoice->zip_code}}</p>
                         <p class="font-size-14">{{$invoice->order_note}}</p>
-
                         <table class="unstyledTable">
                             <thead>
                             <tr>
@@ -212,7 +209,7 @@
                             </tr>
                         </table>
 
-                        <div class="footer"><h2 class="font-weight-400">{{$allTotal}}<h2/></div>
+                        <div class="footer"><h3 class="font-weight-400">Toplam Tutar: {{$allTotal}} ₺ <h3/></div>
                     </div>
                 </div>
             </div>

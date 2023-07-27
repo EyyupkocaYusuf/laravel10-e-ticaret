@@ -26,9 +26,9 @@
                     <p>{!! $product->content ?? '' !!}</p>
                     <p><strong class="text-primary h4">{{number_format($product->price,2)}} ₺</strong></p>
 
-                 <form action="{{route('sepet.add')}}" method="POST">
+                 <form id="addForm" method="POST">
                         @csrf
-                     <input type="hidden" name="product_id" value="{{$product->id}}">
+                     <input type="hidden" name="product_id" value="{{sifrele($product->id)}}">
                     <div class="mb-1 d-flex">
                         <label for="option-xs" class="d-flex mr-3 mb-3">
                             <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-xs" value="XS" {{$product->size == 'XS' ? 'checked' : ''}} name="size"></span> <span class="d-inline-block text-black">XS</span>
@@ -95,5 +95,30 @@
         </div>
     </div>
     @endif
+@endsection
+
+@section('customjs')
+    {{--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>--}}
+
+    <script>
+        $(document).on('submit','#addForm', function (e){
+            e.preventDefault();
+            const formData = $(this).serialize();
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type:"POST",
+                url:"{{route('sepet.add')}}",
+                data:formData,
+                success: function (response) {
+                    toastr.success(response.message);
+                    $('.count').text(response.sepetCount);
+                }
+            });
+
+        });
+
+    </script>
 @endsection
 
