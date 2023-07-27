@@ -178,7 +178,7 @@
                 url:newUrl,
                 success: function (response) {
                     $('.productContent').html(response.data);
-                    $('.paginateButtons').html(response.data);
+                    $('.paginateButtons').html(response.paginate);
                 }
             });
         }
