@@ -61,7 +61,16 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="itemTotal">{{$cart['price'] * $cart['qty']}}</td>
+                                @php
+                                    $fiyat = $cart['price'];
+                                    $adet = $cart['qty'];
+                                    $kdv = $cart['kdv'] ?? 0;
+
+                                    $kdvTutar = ($fiyat * $adet) * ($kdv/100);
+                                    $toplamTutar = ($fiyat * $adet) + $kdvTutar;
+
+                                @endphp
+                                <td class="itemTotal">{{$toplamTutar}}</td>
                                 <td>
                                     <form action="{{route('sepet.remove')}}" method="post">
                                         @csrf
@@ -115,7 +124,7 @@
                                     <span class="text-black">Total</span>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <strong class="text-black">{{session()->get('total_price') ?? ''}}</strong>
+                                    <strong class="text-black newTotalPrice">{{session()->get('total_price') ?? ''}}</strong>
                                 </div>
                             </div>
 
@@ -149,6 +158,12 @@
             sepetUpdate();
         });
 
+        $(document).on('click','.increaseBtn',function(e) {
+            $('.orderItem').removeClass('selected');
+            $(this).closest('.orderItem').addClass('selected');
+            sepetUpdate();
+        });
+
         function sepetUpdate() {
             var product_id = $('.selected').closest('.orderItem').attr('data-id');
             var qty = $('.selected').closest('.orderItem').find('.qtyItem').val();
@@ -168,15 +183,12 @@
                     if(qty == 0) {
                         $('.selected').remove();
                     }
-                    console.log(response);
+
+                    $('.newTotalPrice').text(response.totalPrice);
                 }
             });
         }
 
-        $(document).on('click','.increaseBtn',function(e) {
-            $('.orderItem').removeClass('selected');
-            $(this).closest('.orderItem').addClass('selected');
-            sepetUpdate();
-        });
+
         </script>
 @endsection

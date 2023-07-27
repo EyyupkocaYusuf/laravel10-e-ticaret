@@ -19,7 +19,10 @@ class CartController extends Controller
 
         foreach ($cartItem as $cart)
         {
-            $totalPrice += $cart['price'] * $cart['qty'];
+            $kdv = $cart['kdv'] ?? 0;
+            $kdvTutar = ($cart['price'] * $cart['qty']) * ($kdv/100);
+            $toplamTutar = ($cart['price'] * $cart['qty']) + $kdvTutar;
+            $totalPrice += $toplamTutar;
         }
 
         if(session()->get('coupon_code')) {
@@ -81,6 +84,7 @@ class CartController extends Controller
               'image' => $urun->image,
               'price' => $urun->price,
               'qty' => $qty ?? 1,
+              'kdv' => $urun->kdv,
               'size' => $size,
             ];
         }
@@ -118,14 +122,12 @@ class CartController extends Controller
         }
 
          $kuponprice = $kupon->price ?? 0;
-
          $kuponcode = $kupon->name ?? '';
-
          $newtotalPrice = $totalPrice - $kuponprice;
+
         session()->put('coupon_price',$kuponprice);
         session()->put('total_price',$newtotalPrice);
         session()->put('coupon_code',$kuponcode);
-
 
         return back()->withSuccess('Kupon Uygulandı');
     }
@@ -148,11 +150,36 @@ class CartController extends Controller
             if($qty == 0 || $qty < 0) {
                 unset($cartItem[$productID]);
             }
-            $itemTotal = $urun->price * $qty;
+
+            $kdvOraniitem = $urun->kdv ;
+            $kdvtutaritem = ($urun->price * $qty) * ($kdvOraniitem/100);
+            $itemTotal = $urun->price * $qty + $kdvtutaritem;
+
         }
         session(['cart' => $cartItem]);
+
+        $cartItem = session()->get('cart');
+        $totalPrice = 0;
+        foreach ($cartItem as $cart)
+        {
+            $kdvOrani = $cart['kdv'] ?? 0;
+            $kdvtutar = ($cart['price'] * $cart['qty']) * ($kdvOrani/100);
+            $toplamTutar = ($cart['price'] * $cart['qty']) + $kdvtutar;
+            $totalPrice += $toplamTutar;
+        }
+
+        if(session()->get('coupon_code')) {
+            $kupon = Coupon::where('name',session()->get('coupon_code'))->whereStatus('1')->first();
+            $kuponprice = $kupon->price ?? 0;
+
+            $newtotalPrice = $totalPrice - $kuponprice;
+        }else {
+            $newtotalPrice = $totalPrice;
+        }
+
+        session()->put('total_price',$newtotalPrice);
         if($request->ajax()) {
-            return response()->json(['itemTotal'=>$itemTotal,'message'=>'Sepet Güncellendi']);
+            return response()->json(['itemTotal'=>$itemTotal,'totalPrice'=>session()->get('total_price'),'message'=>'Sepet Güncellendi']);
         }
 
     }

@@ -143,7 +143,7 @@
         var defaultmaxprice = "{{request()->max ?? $maxprice}}";
 
         var url = new URL(window.location.href);
-
+        console.log(url)
         function filter(){
             var colorList=$(".colorList:checked").map((_,chk) => chk.value).get();
             var sizeList=$(".sizeList:checked").map((_,chk) => chk.value).get();
