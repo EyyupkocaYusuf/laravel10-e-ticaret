@@ -111,9 +111,18 @@
                                     <tbody>
                                     @if(session()->get('cart'))
                                         @foreach(session()->get('cart') as $key => $cart)
+                                            @php
+                                                $fiyat = $cart['price'];
+                                                $adet = $cart['qty'];
+                                                $kdv = $cart['kdv'] ?? 0;
+
+                                                $kdvTutar = ($fiyat * $adet) * ($kdv/100);
+                                                $toplamTutar = ($fiyat * $adet) + $kdvTutar;
+
+                                            @endphp
                                             <tr>
                                                 <td>{{$cart['name']}} <strong class="mx-2">x</strong> {{$cart['qty']}}</td>
-                                                <td>{{$cart['price']}}</td>
+                                                <td>{{$toplamTutar}}</td>
                                             </tr>
                                         @endforeach
                                     @endif

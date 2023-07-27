@@ -14,9 +14,13 @@ class CartController extends Controller
 {
     public function index()
     {
-        $cartItem = session('cart',[]);
-        $totalPrice = 0;
+        $cartItem = $this->sepetList();
+        return view('frontend.pages.cart',compact('cartItem'));
+    }
 
+    function sepetList() {
+        $cartItem = session()->get('cart') ?? [];
+        $totalPrice = 0;
         foreach ($cartItem as $cart)
         {
             $kdv = $cart['kdv'] ?? 0;
@@ -28,38 +32,24 @@ class CartController extends Controller
         if(session()->get('coupon_code')) {
             $kupon = Coupon::where('name',session()->get('coupon_code'))->whereStatus('1')->first();
             $kuponprice = $kupon->price ?? 0;
-            $kuponcode = $kupon->name ?? '';
-
             $newtotalPrice = $totalPrice - $kuponprice;
         }else {
             $newtotalPrice = $totalPrice;
         }
 
+        if(count(session()->get('cart')) == 0 && $totalPrice != 0)
+        {
+            session()->forget('coupon_code');
+        }
+
         session()->put('total_price',$newtotalPrice);
-        return view('frontend.pages.cart',compact('cartItem'));
+        return $cartItem;
     }
 
     public function sepetform()
     {
-        $cartItem = session('cart',[]);
-        $totalPrice = 0;
+        $cartItem = $this->sepetList();
 
-        foreach ($cartItem as $cart)
-        {
-            $totalPrice += $cart['price'] * $cart['qty'];
-        }
-
-        if(session()->get('coupon_code')) {
-            $kupon = Coupon::where('name',session()->get('coupon_code'))->whereStatus('1')->first();
-            $kuponprice = $kupon->price ?? 0;
-            $kuponcode = $kupon->name ?? '';
-
-            $newtotalPrice = $totalPrice - $kuponprice;
-        }else {
-            $newtotalPrice = $totalPrice;
-        }
-
-        session()->put('total_price',$newtotalPrice);
         return view('frontend.pages.cartform',compact('cartItem'));
     }
 
@@ -103,31 +93,28 @@ class CartController extends Controller
         }
         session(['cart' => $cartItem]);
 
+        if(count(session()->get('cart')) == 0)
+        {
+            session()->forget('coupon_code');
+        }
+
         return back()->withSuccess('Ürün Sepetten Kaldırıldı.');
     }
 
     public function couponcheck(Request $request) {
-        $cartItem = session('cart',[]);
-        $totalPrice = 0;
-
-        foreach ($cartItem as $cart)
-        {
-             $totalPrice += $cart['price'] * $cart['qty'];
-        }
 
         $kupon = Coupon::where('name',$request->coupon_name)->whereStatus('1')->first();
 
         if(empty($kupon)) {
             return back()->withError('Kupon Bulunamadı');
         }
-
-         $kuponprice = $kupon->price ?? 0;
-         $kuponcode = $kupon->name ?? '';
-         $newtotalPrice = $totalPrice - $kuponprice;
-
-        session()->put('coupon_price',$kuponprice);
-        session()->put('total_price',$newtotalPrice);
+        $kuponcode = $kupon->name ?? '';
         session()->put('coupon_code',$kuponcode);
+
+        $kuponprice = $kupon->price ?? 0;
+        session()->put('coupon_price',$kuponprice);
+
+        $this->sepetList();
 
         return back()->withSuccess('Kupon Uygulandı');
     }
@@ -150,34 +137,13 @@ class CartController extends Controller
             if($qty == 0 || $qty < 0) {
                 unset($cartItem[$productID]);
             }
-
             $kdvOraniitem = $urun->kdv ;
             $kdvtutaritem = ($urun->price * $qty) * ($kdvOraniitem/100);
             $itemTotal = $urun->price * $qty + $kdvtutaritem;
-
         }
         session(['cart' => $cartItem]);
 
-        $cartItem = session()->get('cart');
-        $totalPrice = 0;
-        foreach ($cartItem as $cart)
-        {
-            $kdvOrani = $cart['kdv'] ?? 0;
-            $kdvtutar = ($cart['price'] * $cart['qty']) * ($kdvOrani/100);
-            $toplamTutar = ($cart['price'] * $cart['qty']) + $kdvtutar;
-            $totalPrice += $toplamTutar;
-        }
-
-        if(session()->get('coupon_code')) {
-            $kupon = Coupon::where('name',session()->get('coupon_code'))->whereStatus('1')->first();
-            $kuponprice = $kupon->price ?? 0;
-
-            $newtotalPrice = $totalPrice - $kuponprice;
-        }else {
-            $newtotalPrice = $totalPrice;
-        }
-
-        session()->put('total_price',$newtotalPrice);
+         $this->sepetList();
         if($request->ajax()) {
             return response()->json(['itemTotal'=>$itemTotal,'totalPrice'=>session()->get('total_price'),'message'=>'Sepet Güncellendi']);
         }
@@ -222,6 +188,7 @@ class CartController extends Controller
                 'name'=>$item['name'],
                 'price'=>$item['price'],
                 'qty'=>$item['qty'],
+                'kdv'=>$item['kdv'],
             ]);
         }
         session()->forget('cart');
