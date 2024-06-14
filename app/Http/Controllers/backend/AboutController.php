@@ -11,6 +11,7 @@ class AboutController extends Controller
 {
     public function index()
     {
+
         $about = About::first();
         return view('backend.pages.about.index',compact('about'));
     }
